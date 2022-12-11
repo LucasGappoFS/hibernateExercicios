@@ -1,0 +1,84 @@
+Consultar projeto mildevs-carros, implementado pelo João; 
+Lá tem os arquivos relacionados às informações de persistência de dados e relação entre entidades necessárias para desenvolver um programa.
+
+Algumas propriedades irão para o arquivo persistence.xml: 
+1) endereço do servidor postgreSQL
+2) usuário do banco de dados postgreSQL
+3) senha do banco de dados postgreSQL
+
+Algumas informações são adicionadas ao persistence.xml:
+1) Schema padrão (exemplo: caso anterior, onde tabela carros estava no schema carros, com chamada pelo DAO na forma sql = ... carros.carros
+2) nome da tabela entra como persistence-unit name="..."
+
+
+Conjunto de anotações disponiveis na biblioteca do Hibernate que facilitam o mapeamento:
+1) @Entity - representa uma entidade: UMA TABELA - define o nome da tabela criada no banco de dados;
+2) @Id - indica qual atributo da entidade / Pojo será a Primary Key da tabela criada no banco de dados
+3) @Column - atribui nome da coluna correspondente ao atributo passado, e caso nao seja usada o hibernate fará a correspondencia sozinho
+			Exemplo:	@Column(name="vel_max" [snake_case])
+						private float velocidadeMaxima [camelCase] 
+
+
+
+v		------------------------------------------------------------------------		v
+EntityManagerFactory - classe do Hibernate [...] = Persistence.createEntityManagerFactory("...");
+factory.close();
+EntityManager manager = factory.createEntityManager();
+^  		Cria a tabela com base no que é parametrizado no arquivo persistence.xml		^
+
+
+
+----------- Comandos de persistência e commit: ------------------------
+EntityManagerFactory factory = Persistencia.createEntityManagerFactory(-nome_da_tabela-);
+EntityManager manager = factory.createEntityManager();
+manager.getTransaction().begin();
+manager.persist(-objeto-);
+manager.getTransaction().commit();
+manager.close();
+factory.close();
+
+
+
+------------- Consulta ------------------------
+Classe objeto = manager.find(Classe.class, "...");			// Encontrar registros COM BASE NA PRIMARY KEY
+sysout(objeto);
+> fechar manager e factory;
+
+
+
+----------- Modificação -------------------------
+Classe objeto = manager.find(Classe.class, "...");
+objeto.setAlgumValor(----);
+manager.getTransaction().begin();
+manager.merge(objeto);
+manager.getTransaction().commit();
+> fechar manager e factory;
+
+
+
+-------------- Remoção ---------------------
+Classe objeto = manager.find(Classe.class, "...");
+objeto.setAlgumValor(----);
+manager.getTransaction().begin();
+manager.remove(objeto);
+manager.getTransaction().commit();
+> fechar manager e factory;
+
+
+> Não será utilizado mais SQL escrito, porém deve-se utilizar ainda uma linguagem similar, chamada JPQL (Java Persistence Query Language)
+Um nível acima de abstração do SQL
+Hibernate sabe transformar o JPQL na linguagem do DBA utilizado (MySQL, PostgreSQL, Mongo.db, etc, etc...)
+
+
+------------------ Consultas e alterações com JPQL ----------------------------
+Query query = manager.createQuery("select c from Tabela as c where c.coluna = :atributoObjetoJAVA");
+query.setParameter(atributoObjetoJAVA, -valor-);
+
+
+
+
+
+
+
+
+
