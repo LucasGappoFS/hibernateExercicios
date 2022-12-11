@@ -74,7 +74,7 @@ Hibernate sabe transformar o JPQL na linguagem do DBA utilizado (MySQL, PostgreS
 Query query = manager.createQuery("select c from Tabela as c where c.coluna = :atributoObjetoJAVA");
 query.setParameter(atributoObjetoJAVA, -valor-);
 
-
+QUALQUER COISA
 
 
 
